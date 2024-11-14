@@ -1,0 +1,16 @@
+<!-- alumni/templates/alumni_form.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Alumni Form</h2>
+<form method="post" action="{% url 'alumni_form' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" class="form-control" id="firstName" name="first_name" required>
+    </div>
+    <!-- Add fields for all the required inputs as per your database schema -->
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
