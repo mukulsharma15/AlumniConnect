@@ -1,0 +1,70 @@
+-- Database and Usage
+CREATE DATABASE AlumniConnect;
+USE AlumniConnect;
+
+-- Table: Alumni_Info
+CREATE TABLE Alumni_Info (
+    AlumniID INT PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    MiddleName VARCHAR(50), -- Optional field for middle name
+    LastName VARCHAR(50) NOT NULL,
+    FullName VARCHAR(150) GENERATED ALWAYS AS (CONCAT(FirstName, ' ', COALESCE(MiddleName, ''), ' ', LastName)) STORED,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    GradYear INT,
+    DateOfBirth DATE, -- New attribute for Date of Birth
+    CurrentCity VARCHAR(50)
+);
+
+-- Table: Alumni_Phone (1NF - separate table for multi-valued attribute with split phone number fields)
+CREATE TABLE Alumni_Phone (
+    AlumniID INT,
+    CountryCode VARCHAR(5), -- New column for country code
+    MobileNumber VARCHAR(10), -- New column for 10-digit mobile number
+    PRIMARY KEY (AlumniID, MobileNumber),
+    FOREIGN KEY (AlumniID) REFERENCES Alumni_Info(AlumniID) ON DELETE CASCADE
+);
+
+-- Table: Academic_History (Composite Primary Key)
+CREATE TABLE Academic_History (
+    AlumniID INT,
+    Degree_Name VARCHAR(100),
+    CGPA DECIMAL(3, 2),
+    StartYear YEAR,
+    EndYear YEAR,
+    PRIMARY KEY (AlumniID, Degree_Name),
+    FOREIGN KEY (AlumniID) REFERENCES Alumni_Info(AlumniID) ON DELETE CASCADE
+);
+
+-- Table: Achievements (Composite Primary Key)
+CREATE TABLE Achievements (
+    AchievementID INT AUTO_INCREMENT,
+    AlumniID INT,
+    AwardTitle VARCHAR(100),
+    Description TEXT,
+    DateAwarded DATE,
+    PRIMARY KEY (AchievementID, AlumniID),
+    FOREIGN KEY (AlumniID) REFERENCES Alumni_Info(AlumniID) ON DELETE CASCADE
+);
+
+-- Table: Professional_History (Composite Primary Key)
+CREATE TABLE Professional_History (
+    JobID INT AUTO_INCREMENT,
+    AlumniID INT,
+    CompanyName VARCHAR(100),
+    JobTitle VARCHAR(100),
+    StartDate DATE,
+    EndDate DATE,
+    Skills TEXT,
+    PRIMARY KEY (JobID, AlumniID),
+    FOREIGN KEY (AlumniID) REFERENCES Alumni_Info(AlumniID) ON DELETE CASCADE
+);
+
+-- Table: Social_Media (Composite Primary Key and 3NF - avoiding transitive dependency)
+CREATE TABLE Social_Media (
+    AccountID INT AUTO_INCREMENT,
+    AlumniID INT,
+    Platform VARCHAR(50),
+    Username VARCHAR(50)
+    PRIMARY KEY (AccountID, AlumniID),
+    FOREIGN KEY (AlumniID) REFERENCES Alumni_Info(AlumniID) ON DELETE CASCADE
+);

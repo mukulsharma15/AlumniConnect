@@ -56,6 +56,25 @@ def custom_query(request):
         pass
     return render(request, 'custom_query.html', {'schema': schema, 'result': result})
 
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+import json
 
+def alumni_form(request):
+    if request.method == 'POST':
+        data = {
+            'first_name': request.POST.get('first_name'),
+            'last_name': request.POST.get('last_name'),
+            'email': request.POST.get('email'),
+            'phone': request.POST.get('phone'),
+            'graduation_year': request.POST.get('graduation_year'),
+            'degree': request.POST.get('degree'),
+            'major': request.POST.get('major'),
+        }
+        with open('alumni_data.json', 'a') as f:
+            json.dump(data, f)
+            f.write('\n')
+        return redirect('home')
+    return render(request, 'alumni_form.html')
 # Additional views for AcademicHistory, Achievement, ProfessionalHistory, SocialMedia, AlumniPhone 
 # (following the same create, list, and update structure)
