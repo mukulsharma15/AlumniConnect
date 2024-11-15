@@ -3,14 +3,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Alumni Form</h2>
-<form method="post" action="{% url 'alumni_form' %}">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="firstName">First Name</label>
-        <input type="text" class="form-control" id="firstName" name="first_name" required>
-    </div>
-    <!-- Add fields for all the required inputs as per your database schema -->
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+<div class="container">
+    <h2>Alumni Form</h2>
+    <form method="post" action="{% url 'alumni_form' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="first_name" required>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="last_name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+            <label for="graduationYear">Graduation Year</label>
+            <input type="number" class="form-control" id="graduationYear" name="graduation_year" required>
+        </div>
+        <div class="form-group">
+            <label for="degree">Degree</label>
+            <input type="text" class="form-control" id="degree" name="degree" required>
+        </div>
+        <div class="form-group">
+            <label for="major">Major</label>
+            <input type="text" class="form-control" id="major" name="major" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 {% endblock %}
