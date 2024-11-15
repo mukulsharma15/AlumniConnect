@@ -18,8 +18,8 @@ CREATE TABLE Alumni_Info (
 -- Table: Alumni_Phone (1NF - separate table for multi-valued attribute with split phone number fields)
 CREATE TABLE Alumni_Phone (
     AlumniID INT,
-    CountryCode VARCHAR(5), -- New column for country code
-    MobileNumber VARCHAR(10), -- New column for 10-digit mobile number
+    CountryCode VARCHAR(5) NOT NULL, -- New column for country code
+    MobileNumber VARCHAR(10) NOT NULL, -- New column for 10-digit mobile number
     PRIMARY KEY (AlumniID, MobileNumber),
     FOREIGN KEY (AlumniID) REFERENCES Alumni_Info(AlumniID) ON DELETE CASCADE
 );
@@ -64,7 +64,7 @@ CREATE TABLE Social_Media (
     AccountID INT AUTO_INCREMENT,
     AlumniID INT,
     Platform VARCHAR(50),
-    Username VARCHAR(50)
+    Username VARCHAR(50),
     PRIMARY KEY (AccountID, AlumniID),
     FOREIGN KEY (AlumniID) REFERENCES Alumni_Info(AlumniID) ON DELETE CASCADE
 );
