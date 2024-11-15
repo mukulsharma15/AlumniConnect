@@ -136,3 +136,7 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+alumni/__pycache__/admin.cpython-311.pyc
+alumni/__pycache__/urls.cpython-311.pyc
+alumni/__pycache__/views.cpython-311.pyc
+alumni/__pycache__/models.cpython-311.pyc
