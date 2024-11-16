@@ -1,0 +1,27 @@
+<!-- alumni/templates/custom_query.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Custom SQL Query</h2>
+    <div>
+        <h4>Database Schema</h4>
+        <pre>{{ schema }}</pre>
+    </div>
+    <form method="post" action="{% url 'custom_query' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="sqlQuery">Enter SQL Query</label>
+            <textarea class="form-control" id="sqlQuery" name="sqlQuery" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Execute</button>
+    </form>
+    {% if result %}
+    <div class="mt-4">
+        <h4>Query Output</h4>
+        <pre>{{ result }}</pre>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
