@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'alumni',
+    'rest_framework',
+    
 ]
 
 MIDDLEWARE = [
@@ -77,7 +79,7 @@ WSGI_APPLICATION = 'alumni_connect.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test_alumniconnect',  # Your RDS DB name
+        'NAME': 'test_2_ac',  # Your RDS DB name
         'USER': 'admin',
         'PASSWORD': 'zuqveb-gihgyh-xaFbu3',
         'HOST': 'alumniconnect-db.c7w2mqyuejv6.eu-north-1.rds.amazonaws.com',  # RDS endpoint
