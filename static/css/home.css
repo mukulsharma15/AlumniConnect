@@ -14,6 +14,12 @@ body {
 }
 
 /* Navbar */
+
+.toggle-icon{
+    height: 40px;
+    width: 40px;
+    border-radius: 5px;
+}
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -71,7 +77,7 @@ body {
 }
 
 .nav-button .btn-secondary-1 {
-    background-color: #fcb900;
+    background-color: white;
     color: #0f4c81;
     padding: 8px 15px;
     border-radius: 5px;
@@ -82,7 +88,7 @@ body {
 }
 
 .nav-button .btn-secondary-1:hover {
-    background-color: #d59e00;
+    background-color: #fcb900;
     font-weight: 800;
 
 }
@@ -98,7 +104,7 @@ body {
 }
 
 .nav-button .btn-secondary:hover {
-    background-color: #d59e00;
+    background-color: white;
     font-weight: 800;
 
 }
@@ -148,7 +154,7 @@ body {
 }
 
 .btn-main:hover {
-    background-color: #d59e00;
+    background-color: white;
     font-weight: 900;
     color: #0f4c81;
     text-decoration: none;
