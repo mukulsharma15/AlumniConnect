@@ -1,0 +1,248 @@
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #fdfdfd;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: linear-gradient(90deg, #0f4c81, #1f6b8b);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar .logo {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+}
+.navbar .logo:hover {
+    font-size: 28px;
+    font-weight: 1000;
+    color: #ffffff;
+}
+
+.navbar .logo span {
+    color: #fcb900;
+}
+
+.navbar-nav {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.navbar-nav .nav-item {
+    margin: 0 10px;
+}
+
+.navbar-nav .nav-link {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    transition: color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
+    color: #fcb900;
+    font-weight: 800;
+
+}
+
+.nav-button {
+    display: flex;
+    align-items: center;
+}
+
+.nav-button .btn-secondary-1 {
+    background-color: #fcb900;
+    color: #0f4c81;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+}
+
+.nav-button .btn-secondary-1:hover {
+    background-color: #d59e00;
+    font-weight: 800;
+
+}
+
+.nav-button .btn-secondary {
+    background-color: #fcb900;
+    color: #0f4c81;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.nav-button .btn-secondary:hover {
+    background-color: #d59e00;
+    font-weight: 800;
+
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #1f6b8b, #0f4c81);
+    color: white;
+    padding: 50px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-content {
+    max-width: 450px;
+    text-align: center;
+    margin: 20px;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #fcb900;
+}
+
+.hero-content span {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #e0f2f1;
+}
+
+.btn-main {
+    padding: 10px 20px 13px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    background-color: #fcb900;
+    color: #0f4c81;
+    transition: all 0.6s ease;
+}
+
+.btn-main:hover {
+    background-color: #d59e00;
+    font-weight: 900;
+    color: #0f4c81;
+    text-decoration: none;
+}
+
+.hero-image {
+    max-width: 200px;
+    margin: 20px;
+}
+
+.hero-image img {
+    width: 100%;
+}
+
+/* Features Section */
+.features {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #ffffff;
+    border-top: 5px solid #fcb900;
+}
+
+.features h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #0f4c81;
+}
+
+.features-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.feature {
+    background: #f1f5f9;
+    padding: 20px;
+    border-radius: 10px;
+    width: 20vw;
+    min-width: 250px;
+    text-align: left;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.feature h3 {
+    font-size: 18px;
+    color: #0f4c81;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    font-size: 14px;
+    color: #374151;
+}
+
+.feature img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* About Us Section */
+.about {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #fdfdfd;
+}
+
+.about h2 {
+    font-size: 2rem;
+    color: #0f4c81;
+    margin-bottom: 20px;
+}
+
+.about p {
+    font-size: 1.1rem;
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Footer */
+footer {
+    background: #0f4c81;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 0.9rem;
+    border-top: 5px solid #fcb900;
+}
