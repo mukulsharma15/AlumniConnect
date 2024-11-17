@@ -1,10 +1,58 @@
 <!-- alumni/templates/about.html -->
 
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
-<div class="jumbotron text-center">
-    <h2>About Us</h2>
-    <p>Meet the team: Mukul Sharma, Manvendra Singh Bika, Binwant Kaur, Bhoomi Priya, Sharif</p>
-</div>
+<header class="about-header">
+  <h1>About Us</h1>
+  <p>
+    We’re like a broken Wi-Fi: Mukul’s the tough router, Binwant’s decoding
+    double meanings on a separate network, Manvendra lags, and Bhoomi
+    disconnects!
+  </p>
+</header>
+
+<section class="team-container">
+  <div class="team-member">
+    <img src="{% static 'images/mukul.jpeg' %}" alt="Mukul" />
+    <h3>Mukul</h3>
+    <p class="position">Mastermind</p>
+    <p class="description">
+      Mukul acts tough, is a softie, annoys everyone, and after 21 days of
+      lagging, still aces tests like a genius.
+    </p>
+    <button class="contact-btn">Contact</button>
+  </div>
+  <div class="team-member">
+    <img src="{% static 'images/manvendra.jpeg' %}" alt="Manvendra" />
+    <h3>Manvendra</h3>
+    <p class="position">Know-It-All</p>
+    <p class="description">
+      Manvendra is the know-it-all who always has the answers and keeps the team on track.
+    </p>
+    <button class="contact-btn">Contact</button>
+  </div>
+  <!-- Add other team members similarly -->
+  <div class="team-member">
+    <img src="{% static 'images/binwant.jpeg' %}" alt="binwant" />
+
+    <h3>Binwant</h3>
+    <p class="position">Zen Master</p>
+    <p class="description">
+      Binwant is Obsessed with Friends, catches double meanings first, and
+      has the patience of a monk! Our Peaceful Potato
+    </p>
+    <button class="contact-btn">Contact</button>
+  </div>
+  <div class="team-member">
+    <img src="{% static 'images/bhoomi.jpeg' %}" alt="bhoomi" />
+    <h3>Bhoomi</h3>
+    <p class="position">Noobydooby</p>
+    <p class="description">
+      Bhoomi is stuck at 9 in brain age, dumber than a rock, the living
+      definition of a noob, and a disaster waiting to happen!
+    </p>
+    <button class="contact-btn">Contact</button>
+  </div>
+</section>
 {% endblock %}

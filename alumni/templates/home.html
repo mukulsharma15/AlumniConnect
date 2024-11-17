@@ -1,11 +1,57 @@
-<!-- home.html -->
-
 {% extends "base.html" %}
-{% block title %}Home - AlumniConnect{% endblock %}
+{% load static %}
 {% block content %}
-<div class="jumbotron text-center">
-    <h1>Welcome to AlumniConnect</h1>
-    <p>This platform is designed to manage and connect alumni with their institution.</p>
-    <p>Here, you can manage alumni data, add achievements, view academic and professional history, and more.</p>
-</div>
+
+<!-- Navbar -->
+
+<!-- Hero Section -->
+<header id="home" class="hero-section">
+    <div class="hero-content">
+        <h1>Welcome to <span>AlumniConnect</span></h1>
+        <p>Your gateway to connecting with alumni, exploring achievements, and accessing institutional resources, all in one place.</p>
+        <a href="#features" class="btn-main">Explore Features</a>
+    </div>
+    <div class="hero-image">
+        <img src="{% static 'images/saug.png' %}" alt="SAU Logo">
+    </div>
+</header>
+
+<!-- Features Section -->
+<section id="features" class="features">
+    <h2>Our Features</h2>
+    <div class="features-container">
+        <div class="feature">
+            <img src="{% static 'images/achievemnt.jpeg' %}" alt="Achievements">
+            <h3>Achievements</h3>
+            <p>Track and showcase alumni achievements across diverse domains.</p>
+        </div>
+        <div class="feature">
+            <img src="{% static 'images/media.jpeg' %}" alt="Social Media">
+            <h3>Social Media</h3>
+            <p>Engage and interact with alumni via integrated social media tools.</p>
+        </div>
+        <div class="feature">
+            <img src="{% static 'images/ahistory.jpeg' %}" alt="Academic History">
+            <h3>Academic History</h3>
+            <p>Access and manage your academic milestones with ease.</p>
+        </div>
+        <div class="feature">
+            <img src="{% static 'images/proffhis.jpeg' %}" alt="Professional History">
+            <h3>Professional History</h3>
+            <p>Network and discover opportunities through alumni career paths.</p>
+        </div>
+    </div>
+</section>
+
+<!-- About Us Section -->
+<section id="about" class="about">
+    <h2>About Us</h2>
+    <p>AlumniConnect is a dynamic platform designed to foster meaningful relationships between alumni and their alma mater. We aim to build a thriving community through connectivity, resource sharing, and opportunities for collaboration.</p>
+</section>
+
+<!-- Footer -->
+<!-- <footer>
+    <p>&copy; 2024 AlumniConnect. All rights reserved.</p>
+</footer> -->
+
 {% endblock %}
