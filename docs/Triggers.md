@@ -23,7 +23,7 @@ CREATE TRIGGER Alumni_Email_Validate
 BEFORE INSERT ON Alumni_Info
 FOR EACH ROW
 BEGIN
-    IF NEW.Email NOT REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
+    IF NEW.email NOT REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid email format';
     END IF;
 END //
@@ -37,7 +37,10 @@ CREATE TRIGGER Alumni_Phone_Validate
 BEFORE INSERT ON Alumni_Phone
 FOR EACH ROW
 BEGIN
-    IF NEW.MobileNumber NOT REGEXP '^[0-9]{10}$' THEN
+    IF NEW.country_code NOT REGEXP '^[0-9]{1,5}$' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid country code format';
+    END IF;
+    IF NEW.mobile_number NOT REGEXP '^[0-9]{10}$' THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid phone number format';
     END IF;
 END //
@@ -74,27 +77,27 @@ BEGIN
     DECLARE new_values TEXT;
 
     SET old_values = CONCAT(
-        'FirstName: ', OLD.FirstName, ', ',
-        'MiddleName: ', OLD.MiddleName, ', ',
-        'LastName: ', OLD.LastName, ', ',
-        'Email: ', OLD.Email, ', ',
-        'GradYear: ', OLD.GradYear, ', ',
-        'DateOfBirth: ', OLD.DateOfBirth, ', ',
-        'CurrentCity: ', OLD.CurrentCity
+        'FirstName: ', OLD.first_name, ', ',
+        'MiddleName: ', OLD.middle_name, ', ',
+        'LastName: ', OLD.last_name, ', ',
+        'Email: ', OLD.email, ', ',
+        'GradYear: ', OLD.grad_year, ', ',
+        'DateOfBirth: ', OLD.date_of_birth, ', ',
+        'CurrentCity: ', OLD.current_city
     );
 
     SET new_values = CONCAT(
-        'FirstName: ', NEW.FirstName, ', ',
-        'MiddleName: ', NEW.MiddleName, ', ',
-        'LastName: ', NEW.LastName, ', ',
-        'Email: ', NEW.Email, ', ',
-        'GradYear: ', NEW.GradYear, ', ',
-        'DateOfBirth: ', NEW.DateOfBirth, ', ',
-        'CurrentCity: ', NEW.CurrentCity
+        'FirstName: ', NEW.first_name, ', ',
+        'MiddleName: ', NEW.middle_name, ', ',
+        'LastName: ', NEW.last_name, ', ',
+        'Email: ', NEW.email, ', ',
+        'GradYear: ', NEW.grad_year, ', ',
+        'DateOfBirth: ', NEW.date_of_birth, ', ',
+        'CurrentCity: ', NEW.current_city
     );
 
     INSERT INTO Audit_Log (Action_Type, Table_Name, Record_ID, Old_Value, New_Value, Changed_By)
-    VALUES ('UPDATE', 'Alumni_Info', OLD.AlumniID, old_values, new_values, USER());
+    VALUES ('UPDATE', 'Alumni_Info', OLD.alumni_id, old_values, new_values, USER());
 END //
 
 DELIMITER ;
@@ -109,17 +112,17 @@ BEGIN
     DECLARE old_values TEXT;
 
     SET old_values = CONCAT(
-        'FirstName: ', OLD.FirstName, ', ',
-        'MiddleName: ', OLD.MiddleName, ', ',
-        'LastName: ', OLD.LastName, ', ',
-        'Email: ', OLD.Email, ', ',
-        'GradYear: ', OLD.GradYear, ', ',
-        'DateOfBirth: ', OLD.DateOfBirth, ', ',
-        'CurrentCity: ', OLD.CurrentCity
+        'FirstName: ', OLD.first_name, ', ',
+        'MiddleName: ', OLD.middle_name, ', ',
+        'LastName: ', OLD.last_name, ', ',
+        'Email: ', OLD.email, ', ',
+        'GradYear: ', OLD.grad_year, ', ',
+        'DateOfBirth: ', OLD.date_of_birth, ', ',
+        'CurrentCity: ', OLD.current_city
     );
 
     INSERT INTO Audit_Log (Action_Type, Table_Name, Record_ID, Old_Value, Changed_By)
-    VALUES ('DELETE', 'Alumni_Info', OLD.AlumniID, old_values, USER());
+    VALUES ('DELETE', 'Alumni_Info', OLD.alumni_id, old_values, USER());
 END //
 
 DELIMITER ;
@@ -142,32 +145,35 @@ FOR EACH ROW
 BEGIN
     SET NEW.ProfileCompletenessPercentage = (
         (
-            (CASE WHEN NEW.FirstName IS NOT NULL THEN 1 ELSE 0 END) +
-            (CASE WHEN NEW.LastName IS NOT NULL THEN 1 ELSE 0 END) +
-            (CASE WHEN NEW.Email IS NOT NULL THEN 1 ELSE 0 END) +
-            (CASE WHEN NEW.GradYear IS NOT NULL THEN 1 ELSE 0 END) +
-            (CASE WHEN NEW.DateOfBirth IS NOT NULL THEN 1 ELSE 0 END) +
-            (CASE WHEN NEW.CurrentCity IS NOT NULL THEN 1 ELSE 0 END)
+            (CASE WHEN NEW.first_name IS NOT NULL AND NEW.first_name != 'default_first_name' THEN 1 ELSE 0 END) +
+            (CASE WHEN NEW.last_name IS NOT NULL AND NEW.last_name != 'default_last_name' THEN 1 ELSE 0 END) +
+            (CASE WHEN NEW.email IS NOT NULL AND NEW.email != 'default_email@example.com' THEN 1 ELSE 0 END) +
+            (CASE WHEN NEW.grad_year IS NOT NULL AND NEW.grad_year != 0 THEN 1 ELSE 0 END) +
+            (CASE WHEN NEW.date_of_birth IS NOT NULL AND NEW.date_of_birth != '1900-01-01' THEN 1 ELSE 0 END) +
+            (CASE WHEN NEW.current_city IS NOT NULL AND NEW.current_city != 'default_city' THEN 1 ELSE 0 END)
         ) * 100.0 / 6
     );
 END //
 
+DELIMITER ;
+
 -- Create a trigger to update the ProfileCompletenessPercentage column before update
+DELIMITER //
+
 CREATE TRIGGER before_update_profile_completeness
 BEFORE UPDATE ON Alumni_Info
 FOR EACH ROW
 BEGIN
     SET NEW.ProfileCompletenessPercentage = (
         (
-            (CASE WHEN NEW.FirstName IS NOT NULL THEN 1 ELSE 0 END) +
-            (CASE WHEN NEW.LastName IS NOT NULL THEN 1 ELSE 0 END) +
-            (CASE WHEN NEW.Email IS NOT NULL THEN 1 ELSE 0 END) +
-            (CASE WHEN NEW.GradYear IS NOT NULL THEN 1 ELSE 0 END) +
-            (CASE WHEN NEW.DateOfBirth IS NOT NULL THEN 1 ELSE 0 END) +
-            (CASE WHEN NEW.CurrentCity IS NOT NULL THEN 1 ELSE 0 END)
+            (CASE WHEN NEW.first_name IS NOT NULL AND NEW.first_name != 'default_first_name' THEN 1 ELSE 0 END) +
+            (CASE WHEN NEW.last_name IS NOT NULL AND NEW.last_name != 'default_last_name' THEN 1 ELSE 0 END) +
+            (CASE WHEN NEW.email IS NOT NULL AND NEW.email != 'default_email@example.com' THEN 1 ELSE 0 END) +
+            (CASE WHEN NEW.grad_year IS NOT NULL AND NEW.grad_year != 0 THEN 1 ELSE 0 END) +
+            (CASE WHEN NEW.date_of_birth IS NOT NULL AND NEW.date_of_birth != '1900-01-01' THEN 1 ELSE 0 END) +
+            (CASE WHEN NEW.current_city IS NOT NULL AND NEW.current_city != 'default_city' THEN 1 ELSE 0 END)
         ) * 100.0 / 6
     );
 END //
 
 DELIMITER ;
-```
