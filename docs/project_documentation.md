@@ -301,7 +301,7 @@ BEGIN
 	VALUES ('UPDATE', 'Alumni_Info', OLD.alumni_id, old_values, new_values, USER());
 END //
 ```
-  ```
+  
 
 - **Delete Trigger:**
 ```sql
