@@ -1,9 +1,3 @@
-Sure, here's an updated version of your 
-
-README.md
-
- file with additional information about your project, team details, and links to other markdown files.
-
 ### Updated 
 
 README.md
@@ -50,28 +44,41 @@ To get started with AlumniConnect, follow these steps:
    ```sh
    git clone https://github.com/yourusername/alumniconnect.git
    ```
+2. Setup Virtual environment:
+   ```sh
+   python3 -m venv venv
+   ```
 
-2. Navigate to the project directory:
+   - For Unix-like systems (Linux, macOS):
+     ```sh
+     source venv/bin/activate
+     ```
+
+   - For Windows:
+     ```sh
+     .\venv\Scripts\activate
+     ```
+3. Navigate to the project directory:
    ```sh
    cd alumniconnect
    ```
 
-3. Install the required dependencies:
+4. Install the required dependencies:
    ```sh
    pip install -r requirements.txt
    ```
 
-4. Apply the migrations:
+5. Apply the migrations:
    ```sh
    python manage.py migrate
    ```
 
-5. Run the development server:
+6. Run the development server:
    ```sh
    python manage.py runserver
    ```
 
-6. Open your browser and navigate to `http://127.0.0.1:8000/` to access the application.
+7. Open your browser and navigate to `http://127.0.0.1:8000/` to access the application.
 
 ## Contributing
 
