@@ -232,36 +232,35 @@ SET NEW.CreatedTimestamp = CURRENT_TIMESTAMP;
 Triggers validate data before insertion, such as checking email and phone number formats. Invalid entries are rejected, ensuring data accuracy.
 
 - **Email Validation:**
-  ```sql
-  DELIMITER //
-
-  CREATE TRIGGER Alumni_Email_Validate
-  BEFORE INSERT ON Alumni_Info
-  FOR EACH ROW
-  BEGIN
-      IF NEW.email NOT REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
-          SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid email format';
-      END IF;
-  END //
-
-  DELIMITER ;
-  ```
+```sql
+CREATE TRIGGER Alumni_Email_Validate
+BEFORE INSERT ON Alumni_Info
+FOR EACH ROW
+BEGIN
+	IF NEW.email NOT REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid email format';
+	END IF;
+END //
+```
 
 - **Phone Number Validation:**
-  ```sql
-  DELIMITER //
+```sql
+DELIMITER //
 
-  CREATE TRIGGER Alumni_Phone_Validate
-  BEFORE INSERT ON Alumni_Phone
-  FOR EACH ROW
-  BEGIN
-      IF NEW.mobile_number NOT REGEXP '^[0-9]{10}$' THEN
-          SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid phone number format';
-      END IF;
-  END //
+CREATE TRIGGER Alumni_Phone_Validate
+BEFORE INSERT ON Alumni_Phone
+FOR EACH ROW
+BEGIN
+	IF NEW.country_code NOT REGEXP '^[0-9]{1,5}$' THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid country code format';
+	END IF;
+	IF NEW.mobile_number NOT REGEXP '^[0-9]{10}$' THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid phone number format';
+	END IF;
+END //
 
-  DELIMITER ;
-  ```
+DELIMITER ;
+```
 
 ### 2. Audit_Log Triggers
 
@@ -269,55 +268,132 @@ Triggers validate data before insertion, such as checking email and phone number
 An `Audit_Log` table records changes made to `Alumni_Info`. Triggers log the `Action_Type`, affected `Record_ID`, and values before and after the change, along with timestamps and user information. This provides a detailed change history for accountability.
 
 - **Update Trigger:**
-  ```sql
-  CREATE TRIGGER Alumni_Info_Update_Log
-  AFTER UPDATE ON Alumni_Info
-  FOR EACH ROW
-  BEGIN
-      INSERT INTO Audit_Log (Action_Type, Table_Name, Record_ID, Old_Value, New_Value, Changed_By)
-      VALUES ('UPDATE', 'Alumni_Info', OLD.alumni_id, OLD.email, NEW.email, USER());
-  END;
+  
+```sql
+CREATE TRIGGER Alumni_Info_Update_Log
+AFTER UPDATE ON Alumni_Info
+FOR EACH ROW
+BEGIN
+	DECLARE old_values TEXT;
+	DECLARE new_values TEXT;
+
+	SET old_values = CONCAT(
+		'FirstName: ', OLD.first_name, ', ',
+		'MiddleName: ', OLD.middle_name, ', ',
+		'LastName: ', OLD.last_name, ', ',
+		'Email: ', OLD.email, ', ',
+		'GradYear: ', OLD.grad_year, ', ',
+		'DateOfBirth: ', OLD.date_of_birth, ', ',
+		'CurrentCity: ', OLD.current_city
+	);
+
+	SET new_values = CONCAT(
+		'FirstName: ', NEW.first_name, ', ',
+		'MiddleName: ', NEW.middle_name, ', ',
+		'LastName: ', NEW.last_name, ', ',
+		'Email: ', NEW.email, ', ',
+		'GradYear: ', NEW.grad_year, ', ',
+		'DateOfBirth: ', NEW.date_of_birth, ', ',
+		'CurrentCity: ', NEW.current_city
+	);
+
+	INSERT INTO Audit_Log (Action_Type, Table_Name, Record_ID, Old_Value, New_Value, Changed_By)
+	VALUES ('UPDATE', 'Alumni_Info', OLD.alumni_id, old_values, new_values, USER());
+END //
+```
   ```
 
 - **Delete Trigger:**
-  ```sql
-  CREATE TRIGGER Alumni_Info_Delete_Log
-  BEFORE DELETE ON Alumni_Info
-  FOR EACH ROW
-  BEGIN
-      INSERT INTO Audit_Log (Action_Type, Table_Name, Record_ID, Old_Value, Changed_By)
-      VALUES ('DELETE', 'Alumni_Info', OLD.alumni_id, OLD.email, USER());
-  END;
-  ```
+```sql
+CREATE TRIGGER Alumni_Info_Delete_Log
+BEFORE DELETE ON Alumni_Info
+FOR EACH ROW
+BEGIN
+	DECLARE old_values TEXT;
+
+	SET old_values = CONCAT(
+		'FirstName: ', OLD.first_name, ', ',
+		'MiddleName: ', OLD.middle_name, ', ',
+		'LastName: ', OLD.last_name, ', ',
+		'Email: ', OLD.email, ', ',
+		'GradYear: ', OLD.grad_year, ', ',
+		'DateOfBirth: ', OLD.date_of_birth, ', ',
+		'CurrentCity: ', OLD.current_city
+	);
+
+	INSERT INTO Audit_Log (Action_Type, Table_Name, Record_ID, Old_Value, Changed_By)
+	VALUES ('DELETE', 'Alumni_Info', OLD.alumni_id, old_values, USER());
+END //
+```
 
 ### 3. Profile Completeness Check
 A `ProfileCompletenessPercentage` column is dynamically updated using triggers. This percentage indicates how complete a profile is, based on the presence of key attributes.
 
 - **Insert Trigger:**
-  ```sql
-  CREATE TRIGGER before_insert_profile_completeness
-  BEFORE INSERT ON Alumni_Info
-  FOR EACH ROW
-  BEGIN
-      SET NEW.ProfileCompletenessPercentage = (
-          (CASE WHEN NEW.first_name IS NOT NULL THEN 1 ELSE 0 END +
-          CASE WHEN NEW.email IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / 6
-      );
-  END;
-  ```
+```sql
+CREATE TRIGGER before_insert_profile_completeness
+BEFORE INSERT ON Alumni_Info
+FOR EACH ROW
+BEGIN
+	SET NEW.ProfileCompletenessPercentage = (
+		(
+			(CASE WHEN NEW.first_name IS NOT NULL AND NEW.first_name != 'default_first_name' THEN 1 ELSE 0 END) +
+			(CASE WHEN NEW.last_name IS NOT NULL AND NEW.last_name != 'default_last_name' THEN 1 ELSE 0 END) +
+			(CASE WHEN NEW.email IS NOT NULL AND NEW.email != 'default_email@example.com' THEN 1 ELSE 0 END) +
+			(CASE WHEN NEW.grad_year IS NOT NULL AND NEW.grad_year != 0 THEN 1 ELSE 0 END) +
+			(CASE WHEN NEW.date_of_birth IS NOT NULL AND NEW.date_of_birth != '1900-01-01' THEN 1 ELSE 0 END) +
+			(CASE WHEN NEW.current_city IS NOT NULL AND NEW.current_city != 'default_city' THEN 1 ELSE 0 END)
+		) * 100.0 / 6
+	);
+END //
+```
 
 - **Update Trigger:**
-  ```sql
-  CREATE TRIGGER before_update_profile_completeness
-  BEFORE UPDATE ON Alumni_Info
-  FOR EACH ROW
-  BEGIN
-      SET NEW.ProfileCompletenessPercentage = (
-          (CASE WHEN NEW.last_name IS NOT NULL THEN 1 ELSE 0 END +
-          CASE WHEN NEW.grad_year IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / 6
-      );
-  END;
-  ```
+```sql
+CREATE TRIGGER before_update_profile_completeness
+BEFORE UPDATE ON Alumni_Info
+FOR EACH ROW
+BEGIN
+	SET NEW.ProfileCompletenessPercentage = (
+		(
+			(CASE WHEN NEW.first_name IS NOT NULL AND NEW.first_name != 'default_first_name' THEN 1 ELSE 0 END) +
+			(CASE WHEN NEW.last_name IS NOT NULL AND NEW.last_name != 'default_last_name' THEN 1 ELSE 0 END) +
+			(CASE WHEN NEW.email IS NOT NULL AND NEW.email != 'default_email@example.com' THEN 1 ELSE 0 END) +
+			(CASE WHEN NEW.grad_year IS NOT NULL AND NEW.grad_year != 0 THEN 1 ELSE 0 END) +
+			(CASE WHEN NEW.date_of_birth IS NOT NULL AND NEW.date_of_birth != '1900-01-01' THEN 1 ELSE 0 END) +
+			(CASE WHEN NEW.current_city IS NOT NULL AND NEW.current_city != 'default_city' THEN 1 ELSE 0 END)
+		) * 100.0 / 6
+	);
+END //
+```
+<!-- 
+### Insert Triggers
+
+1. **Automatic Timestamp Trigger (Alumni_Info_Insert_Timestamp)**
+   - Adds a `CreatedTimestamp` to the `Alumni_Info` table on insert to track record creation time.
+
+2. **Email Validation Trigger (Alumni_Email_Validate)**
+   - Validates the format of the email address before inserting a new record into the `Alumni_Info` table.
+
+3. **Phone Number Validation Trigger (Alumni_Phone_Validate)**
+   - Validates the format of the country code and phone number before inserting a new record into the `Alumni_Phone` table.
+
+### Audit_Log Triggers
+
+1. **Update Log Trigger (Alumni_Info_Update_Log)**
+   - Logs changes made to the `Alumni_Info` table into the `Audit_Log` table after an update, capturing old and new values.
+
+2. **Delete Log Trigger (Alumni_Info_Delete_Log)**
+   - Logs deletions from the `Alumni_Info` table into the `Audit_Log` table before a record is deleted, capturing the old values.
+
+### Profile Completeness Check Triggers
+
+1. **Insert Profile Completeness Trigger (before_insert_profile_completeness)**
+   - Calculates and updates the `ProfileCompletenessPercentage` for a new record in the `Alumni_Info` table before insertion.
+
+2. **Update Profile Completeness Trigger (before_update_profile_completeness)**
+   - Recalculates and updates the `ProfileCompletenessPercentage` for an existing record in the `Alumni_Info` table before an update.
+-->
 
 ---
 
