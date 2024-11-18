@@ -24,7 +24,7 @@ html {
 /* Header Section */
 header {
   text-align: center;
-  background-color: #fcb900;
+  /* background-color: #fcb900; */
   color: #0f4c81;
   padding: 40px 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -48,7 +48,7 @@ header p {
 
 /* Team Section */
 .team-container {
-  background-color: #0f4c81;
+  /* background-color: #0f4c81; */
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -62,7 +62,7 @@ header p {
 }
 
 .team-member {
-  background-color: #fcb900;
+  background-color: #f8feff;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -76,7 +76,7 @@ header p {
 }
 
 .team-member:hover {
-  /* transform: translateY(-10px); */
+  transform: translateY(-10px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
@@ -89,12 +89,14 @@ header p {
   width: 120px;
   max-height: 120px;
   object-fit: cover;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
 
 }
 
 .team-member:hover img {
   max-height: 0;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .team-member h3 {
@@ -121,7 +123,9 @@ header p {
   opacity: 0;
   visibility: hidden;
   overflow: hidden;
-  transition: max-height 0.5s ease, opacity 0.5s ease, visibility 0.5s ease;
+  transition: max-height 0.2s ease, opacity 0.5s ease, visibility 0.2s ease;
+  /* transition-delay: 0.1s; */
+  animation-delay: 0.2s;
 }
 
 .team-member:hover .description {

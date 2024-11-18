@@ -2,7 +2,9 @@
 
 {% extends "base.html" %} {% load static %} {% block content %}
 <header class="about-header">
-  <h1>About Us</h1>
+  <h1>
+    Meet Our Amazing Team <span>M<sup>2</sup>B<sup>2</sup></span>
+  </h1>
   <p>
     We’re like a broken Wi-Fi: Mukul’s the tough router, Binwant’s decoding
     double meanings on a separate network, Manvendra lags, and Bhoomi
@@ -50,6 +52,15 @@
     <p class="description">
       Manvendra is the know-it-all who always has the answers and keeps the team
       on track.
+    </p>
+    <button class="contact-btn">Contact</button>
+  </div>
+  <div class="team-member">
+    <img src="{% static 'images/sharif.jpg' %}" alt="Sharif" />
+    <h3>Sharif</h3>
+    <p class="position">Giga-chad</p>
+    <p class="description">
+      Sharif is everything but "sharif". When Sharif shakes your hand, it's like meeting the Hulk or joining a concrete mixer
     </p>
     <button class="contact-btn">Contact</button>
   </div>
