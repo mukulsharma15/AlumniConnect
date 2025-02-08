@@ -80,11 +80,11 @@ WSGI_APPLICATION = 'alumni_connect.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'AlumniConnect',  # Your RDS DB name
-        'USER': 'admin',
-        'PASSWORD': 'zuqveb-gihgyh-xaFbu3',
-        'HOST': 'alumniconnect-db.c7w2mqyuejv6.eu-north-1.rds.amazonaws.com',  # RDS endpoint
-        'PORT': '3306',  # MySQL default port
+        'NAME': 'railway',  # Your Railway DB name
+        'USER': 'root',  # Your Railway DB user
+        'PASSWORD': 'SsnKwlRLpYyaUBnVwfowmnxTPtTbTieG',  # Your Railway DB password
+        'HOST': 'viaduct.proxy.rlwy.net',  # Public Railway DB host
+        'PORT': '22353',  # Public Railway DB port
     }
 }
 
